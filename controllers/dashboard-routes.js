@@ -1,65 +1,70 @@
 
 // requiring the express package //
-const router = require('express').Router();
+const router = require("express").Router();
 // connecting the post and user from the models //
-const { Post, User } = require('../models/');
+const { Post } = require("../models");
 // connecting the auth.js ffrom the utils //
-const withAuth = require('../utils/auth');
+const withAuth = require("../utils/auth");
 
 // posting to the dashboard //
-router.get('/', withAuth, async (req, res) => {
-  try {
-    // store the results of the db query in a variable called postData. should use something that "finds all" from the Post model. may need a where clause!
+router.get("/", withAuth, (req, res) => {
 
-    const postData = await Post.findAll({
-      where:{"userId": req.session.userId},
-      include: [User]
-    });
-    // this sanitizes the data we just got from the db above (you have to create the above)
-    const posts = postData.map((post) => post.get({ plain: true }));
-console.log(posts);
-    // fill in the view to be rendered -DONE!
-    res.render('all-posts', {
-      // this is how we specify a different layout other than main! no change needed
-      layout: 'dashboard',
-      // coming from line 10 above, no change needed
-      posts,
-    });
-  } catch (err) {
-    res.redirect('login');
-  }
-});
+  // store the results of the db query
+  // in a variable called postData. should use
+  // something that "finds all" from the Post model.
+    Post.findAll({
+      where: {
+        userId: req.session.userId
+      }
+    })
 
-// AFTER CLICK ON NEW POST BUTTON
-router.get('/new', withAuth, (req, res) => {
-  // what view should we send the client when they want to create a new-post? (change this next line) - DONE!
-  res.render('new-post', {
-    // again, rendering with a different layout than main! no change needed
-    layout: 'dashboard',
-  });
-});
-
-// WHEN WE CLICK ON THE POST ITSELF
-router.get('/edit/:id', withAuth, async (req, res) => {
-  try {
-    // what should we pass here? we need to get some data passed via the request body -DONE!
-    const postData = await Post.findByPk(req.params.id);
-
-    if (postData) {
-      // serializing the data
-      const post = postData.get({ plain: true });
-      console.log(post);
-      // which view should we render if we want to edit a post?
-      res.render('edit-post', {
-        layout: 'dashboard',
-        post,
+    // this sanitizes the data we just got from the db
+      .then(dbPostData => {
+        const posts = dbPostData.map((post) => post.get({ plain: true }));
+        
+        res.render("all-posts-admin", {
+          layout: "dashboard",
+          posts
+        });
+      })
+      // promp an err //
+      .catch(err => {
+        console.log(err);
+        res.redirect("login");
       });
-    } else {
-      res.status(404).end();
-    }
-  } catch (err) {
-    res.redirect('login');
-  }
-});
 
+  });
+
+  // to add a new post //
+  router.get("/new", withAuth, (req, res) => {
+    res.render("new-post", {
+      layout: "dashboard"
+    });
+
+  });
+  
+  // this is used to find it by the apikey
+  router.get("/edit/:id", withAuth, (req, res) => {
+    Post.findByPk(req.params.id)
+      .then(dbPostData => {
+        if (dbPostData) {
+          const post = dbPostData.get({ plain: true });
+          // if it's done so post
+          res.render("edit-post", {
+            layout: "dashboard",
+            post
+          });
+
+          // otherwise status of 404
+        } else {
+          res.status(404).end();
+        }
+      })
+
+      // or propmt an err of 500 //
+      .catch(err => {
+        res.status(500).json(err);
+      });
+  });
+  
 module.exports = router;
