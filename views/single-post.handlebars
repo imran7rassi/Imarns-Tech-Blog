@@ -1,11 +1,20 @@
+<!---------------------------------------->
+<!-- we use the post.title expression   -->
+<!---------------------------------------->
 <div class="post">
   <article class="card">
     <div class="card-header flex-row justify-space-between">
       <h2>{{post.title}}</h2>
+<!------------------------------------------------->
+<!-- we use the post.User.username expressions   -->
+<!------------------------------------------------->
       <div>
         Posted by {{post.User.username}} on {{format_date post.createdAt}}
       </div>
     </div>
+<!---------------------------------------->
+<!-- we use the post.body expression   --->
+<!---------------------------------------->
     <div class="card-body">
       {{post.body}}
     </div>
@@ -17,6 +26,9 @@
         <h3>Comments</h3>
       </div>
 
+<!------------------------------------------->
+<!-- we use the post.Comments expression   -->
+<!------------------------------------------->
       <div class="card-body">
         {{#each post.Comments}}
           <div>
@@ -38,6 +50,9 @@
     </div>
 
     <div class="card-body">
+<!---------------------------------------->
+<!--   we use the post.idexpression     -->
+<!---------------------------------------->
       <input type="hidden" name="post-id" value="{{post.id}}" />
 
       <label class="form-label" for="comment-body">Comment</label>
@@ -49,4 +64,4 @@
   </form>
 </div>
 
-<script src="/javascript/comment.js"></script>
+<script src="/js/comment.js"></script>
