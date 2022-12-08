@@ -1,14 +1,22 @@
+
+// this is the delete post handler to delet a post //
 const deletePostHandler = async function(event) {
+
     console.log("clicked", event)
     event.preventDefault();
     const postId = document.getElementById('post-id')
 
+    // fetch the post api 
+    // and the metod for this is delete //
     fetch("/api/post/" + postId.value, {
         method: "delete"
     })
+    
+// we use this function to delete it from the dashboard
     .then(function() {
         document.location.replace("/dashboard");
     })
+
     .catch(err => console.log(err))
 }
 
