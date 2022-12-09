@@ -1,55 +1,38 @@
-
-// requiring the path package //
-const path = require("path");
-// connecting the express package //
+const path = require("path")
 const express = require("express");
-// requiring the express-session package //
+const exphbs = require("express-handlebars")
 const session = require("express-session");
-// requiring the express handlebars from the packages //
-const exphbs = require("express-handlebars");
+const routers = require("./controllers");
+const sequelize = require("./config/connection")
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
-// connecting the port //
+const PORT = process.env.PORT || 3001;
 const app = express();
-const PORT = process.env.PORT || 4050;
 
-// connecting the sequelize //
-const sequelize = require("./config/connection.js");
-const SequelizeStore = require('connect-session-sequelize')(session.Store);
-
+//set up our session
 const sess = {
-  secret: "THe Most Secrert One",
-  cookie: {},
-  resave: false,
-  saveUninitialized: true,
-  store: new SequelizeStore({
+    secret: "placeholder",
+    resave: false,
+    saveUninitialized: true,
+    store: new SequelizeStore({
     db: sequelize
-  })
-};
-
-
+})
+}
+//set up handlebars
+const hbs = exphbs.create()
+app.engine("handlebars", hbs.engine)
+app.set("view engine", "handlebars")
+//set up our session
 app.use(session(sess));
-// to express the handlebars //
-// using the helpers //
-const hbs = exphbs.create({
-  helpers: {
-    format_date: date => {
-      return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-    }
-  }
-
-});
-
-app.engine("handlebars", hbs.engine);
-app.set("view engine", "handlebars");
-
+//standard middlewares
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true}));
 app.use(express.static(path.join(__dirname, "public")));
+//set up our routing
+app.use(routers)
 
-app.use(require('./controllers/'));
-
-// running the app in localhost //
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}!`);
-  sequelize.sync({ force: false });
+sequelize.sync({force: false}).then(() => {
+    app.listen(process.env.PORT || 3001, '0.0.0.0', () => {
+        console.log("Server is running.");
+    });;
 });

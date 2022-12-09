@@ -1,19 +1,17 @@
+const logoutBtn = document.getElementById("logout");
 
-// this is the function to logout
-function logout() {
+const logoutSession = async (event) => {
+    event.preventDefault();
 
-  // fetch the api of user logout
-  // and the method is POST method
-    fetch("/api/user/logout", {
-      method: "post",
-      headers: { "Content-Type": "application/json" }
-    })
+    const response =  await fetch("/api/logout", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"}
+    });
 
-      .then(function() {
+    if(response.ok){
         document.location.replace("/");
-      })
-      
-      .catch(err => console.log(err));
-  }
-  
-  document.querySelector("#logout-link").addEventListener("click", logout);
+    }else {
+        alert(response.statusText);
+    }
+}
+logoutBtn.addEventListener("click", logoutSession);

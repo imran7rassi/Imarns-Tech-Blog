@@ -1,32 +1,66 @@
+const loginForm = document.getElementById("login-form");
+const signupForm = document.getElementById("signup-form")
 
-// this is the login handler to do the login 
-const loginFormHandler = async function(event) {
+const loginFormHandle = async (event) => {
     event.preventDefault();
-  
-    // connecting the username input login //
-    const usernameEl = document.querySelector("#username-input-login");
-    // connecting the password input login //
-    const passwordEl = document.querySelector("#password-input-login");
+    const username = document.getElementById("username-login").value.trim();
+    const password = document.getElementById("password-login").value.trim();
 
-    // fetch the api of user and login
-    // the method for this is the post method
-    fetch("/api/user/login", {
-      method: "post",
-      body: JSON.stringify({
-        username: usernameEl.value,
-        password: passwordEl.value
-      }),
+    //check both inputs are there.
+    if(!username || !password){
+        alert("You have not entered a username/password");
+        return;
+    }
 
-      headers: { "Content-Type": "application/json" }
+    //validate password length
+    if(password.length < 8){
+        alert("Password must be 8 characters or longer!");
+        return;
+    }
+
+    const response = await fetch("/api/login", {
+        method: "POST",
+        body: JSON.stringify({username, password}),
+        headers: {"Content-Type": "application/json"}
+    });
+
+    if(response.ok){
+        document.location.replace("/dashboard");
+    }else{
+        alert(response.statusText)
+    }
+
+
+}
+
+const signupFormHandle = async (event) => {
+    event.preventDefault();
+    const username = document.getElementById("username-signup").value.trim();
+    const password = document.getElementById("password-signup").value.trim();
+
+    //check both inputs are there.
+    if(!username || !password){
+        alert("You must enter both a username and a password");
+        return;
+    }
+
+    //validate password length
+    if(password.length < 8){
+        alert("Password must be at least 8 characters long!");
+        return;
+    }
+
+    const response = await fetch("/api/create", {
+        method: "POST",
+        body: JSON.stringify({username, password}),
+        headers: {"Content-Type" : "application/json"}
     })
 
-      .then(function() {
+    if (response.ok){
         document.location.replace("/dashboard");
-      })
-      
-      .catch(err => console.log(err));
-  };
-  
-  document
-    .querySelector("#login-form")
-    .addEventListener("submit", loginFormHandler);
+    }else {
+        alert(response.statusText);
+    }
+}    
+loginForm.addEventListener("submit", loginFormHandle);
+signupForm.addEventListener("submit", signupFormHandle);
