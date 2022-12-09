@@ -1,10 +1,10 @@
 
 // connecting the user //
-const User = require('./User');
+const User = require('./user');
 // connecting the post.js //
 const Post = require('./post');
 // connecting the coment //
-const Comment = require('./Comment');
+const Comment = require('./comment');
 
 // Creates an association between
 // this (the source) and the provided target. 
