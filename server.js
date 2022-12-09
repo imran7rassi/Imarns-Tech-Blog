@@ -1,38 +1,55 @@
-const path = require("path")
+
+// requiring the path package //
+const path = require("path");
+// connecting the express package //
 const express = require("express");
-const exphbs = require("express-handlebars")
+// requiring the express-session package //
 const session = require("express-session");
-const routers = require("./controllers");
-const sequelize = require("./config/connection")
-const SequelizeStore = require("connect-session-sequelize")(session.Store);
+// requiring the express handlebars from the packages //
+const exphbs = require("express-handlebars");
 
-const PORT = process.env.PORT || 3001;
+// connecting the port //
 const app = express();
+const PORT = process.env.PORT || 4050;
 
-//set up our session
+// connecting the sequelize //
+const sequelize = require("./config/connection.js");
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+
 const sess = {
-    secret: "placeholder",
-    resave: false,
-    saveUninitialized: true,
-    store: new SequelizeStore({
+  secret: "THe Most Secrert One",
+  cookie: {},
+  resave: false,
+  saveUninitialized: true,
+  store: new SequelizeStore({
     db: sequelize
-})
-}
-//set up handlebars
-const hbs = exphbs.create()
-app.engine("handlebars", hbs.engine)
-app.set("view engine", "handlebars")
-//set up our session
-app.use(session(sess));
-//standard middlewares
-app.use(express.json());
-app.use(express.urlencoded({ extended: true}));
-app.use(express.static(path.join(__dirname, "public")));
-//set up our routing
-app.use(routers)
+  })
+};
 
-sequelize.sync({force: false}).then(() => {
-    app.listen(process.env.PORT || 3001, '0.0.0.0', () => {
-        console.log("Server is running.");
-    });;
+
+app.use(session(sess));
+// to express the handlebars //
+// using the helpers //
+const hbs = exphbs.create({
+  helpers: {
+    format_date: date => {
+      return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+    }
+  }
+
+});
+
+app.engine("handlebars", hbs.engine);
+app.set("view engine", "handlebars");
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
+
+app.use(require('./controllers/'));
+
+// running the app in localhost //
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}!`);
+  sequelize.sync({ force: false });
 });

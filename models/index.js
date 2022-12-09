@@ -1,32 +1,32 @@
-const User = require("./user");
-const Post = require("./post");
-const Comment = require("./comment");
 
-User.hasMany(Post, {
-    foreignKey: "user_id",
-    onDelete: "CASCADE"
-})
+// connecting the user //
+const User = require('./users');
+// connecting the post.js //
+const Post = require('./post');
+// connecting the coment //
+const Comment = require('./comments');
 
+// Creates an association between
+// this (the source) and the provided target. 
 Post.belongsTo(User, {
-    foreignKey: "user_id"
-})
+  foreignKey: 'userId',
+  onDelete: 'CASCADE'
+});
 
-User.hasMany(Comment, {
-    foreignKey: "user_id",
-    onDelete: "CASCADE"
-})
+// Create an association that is either 1:m or n:m
+Post.hasMany(Comment, {
+  foreignKey: 'postId',
+  onDelete: 'CASCADE'
+});
 
 Comment.belongsTo(User, {
-    foreignKey: "user_id"
-})
+  foreignKey: 'userId',
+  onDelete: 'CASCADE'
+});
 
-Post.hasMany(Comment, {
-    foreignKey: "post_id",
-    onDelete: "CASCADE"
-})
-
-Comment.belongsTo(Post, {
-    foreignKey: "post_id"
-})
-
-module.exports = {User, Post, Comment}
+// exporting the user, comment and posts //
+module.exports = {
+  User,
+  Comment,
+  Post,
+};
