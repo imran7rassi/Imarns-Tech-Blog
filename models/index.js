@@ -2,7 +2,7 @@
 // connecting the user //
 const User = require('./User');
 // connecting the post.js //
-const Post = require('./poosti');
+const Post = require('./post');
 // connecting the coment //
 const Comment = require('./Comment');
 
