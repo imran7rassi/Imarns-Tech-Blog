@@ -23,11 +23,11 @@ This is a CMS-style blog site similar to a Wordpress site, where developers can 
 
 ## Video Walk Through
 
-![Demo for Walkthrough](./assets/Demo%201.gif)
+![Demo for Walkthrough](./Assets/Tech-blog.gif)
 
 
 
-* You also can go through that link for a better look <a href="https://drive.google.com/file/d/10OIxeA_lr8zw9KC569e-jLzyD8PCvYM8/view">Video</a>
+* You also can go through that link for a better look <a href="https://drive.google.com/file/d/1AIw2zAqbCrARnL4jTIEOWHAkxwQ7YW0c/view">Video</a>
 
 
 ## Usage 
@@ -39,6 +39,7 @@ This is a CMS-style blog site similar to a Wordpress site, where developers can 
 5. Run "npm start".
 6. You presented with Localhost:4050.
 
+![](./Assets/tech-blog-1.jpg)
 
 ## License
 
@@ -53,6 +54,9 @@ This is a CMS-style blog site similar to a Wordpress site, where developers can 
 * <a href="https://www.npmjs.com/package/inquirer">Inquirer.js</a>
 * <a href="https://www.npmjs.com/package/mysql">MySql</a>
 * <a href="https://www.npmjs.com/package/dotenv-webpack">dotenv</a>
+* <a href="https://sequelize.org/">Sequelize</a>
+* <a href="https://www.npmjs.com/package/bcrypt">bcrypt</a>
+* <a href="https://www.npmjs.com/package/express-handlebars">Express Handlebars</a>
 
 
 ## Questions
